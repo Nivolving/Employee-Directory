@@ -1,37 +1,43 @@
 import React from "react";
 import API from "../utils/API";
-import UserTable from "../components/UserTable"
-import SearchForm from "../components/SearchForm"
-import { Container, Card } from "react-bootstrap"
-
+import UserTable from "../components/UserTable";
+import SearchForm from "../components/SearchForm";
+import TopNavbar from "../components/TopNavbar";
+import { Container, Card } from "react-bootstrap";
 
 class Directory extends React.Component {
   state = {
-    firstName: "",
-    lastName: "",
-    manager: "",
     users: [],
-    search:""
+    search: "",
+    sort: "",
   };
 
   updateSearch = (search) => {
-    console.log(search);
-      this.setState({ search });
-  }
+    this.setState({ search });
+  };
 
-  componentDidMount(){
-      API.getUsers()
-      .then( res => this.setState( { users: res.data.results } ) );
+  updateSort = (sort) => {
+    this.setState({ sort });
+  };
+
+  componentDidMount() {
+    API.getUsers().then((res) => this.setState({ users: res.data.results }));
   }
 
   render() {
     return (
-    <Container>
-    <Card body>
-    <SearchForm updateSearch={this.updateSearch}/>
-    </Card>
-    <UserTable users={this.state.users} search={this.state.search}/>
-    </Container>
+      <Container>
+        <TopNavbar />
+        <Card body className="my-4">
+          <SearchForm updateSearch={this.updateSearch} />
+        </Card>
+        <UserTable
+          users={this.state.users}
+          search={this.state.search}
+          sort={this.state.sort}
+          updateSort={this.updateSort}
+        />
+      </Container>
     );
   }
 }
